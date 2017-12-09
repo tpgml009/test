@@ -1,0 +1,28 @@
+extends ../layout
+
+include ../includes/_paginate
+
+block content
+  .container
+    form.form-inline.search-input-group(action='/createEvents', method='GET')
+      i.fa.fa-search
+      input.form-control.mr-sm-2(type='text', name='term', placeholder='Search', aria-label='Search', value=term)
+
+    h1.main-title 
+      | createEvents
+      if createEvents.total > 0
+        .small Total #{createEvents.total} createEvent(s)
+
+    if createEvents.total <= 0 
+      .alert.alert-info No questions available yet
+    else
+      .createEvents
+        each createEvent in createEvents.docs
+          .createEvent
+            a.title(href=`/createEvents/${createEvent.id}`)= createEvent.title
+            include _createEvent
+
+      +paginate(createEvents, '/createEvents', query)
+
+    hr
+    a.btn.btn-primary(href='/createEvents/new') Ask Question
